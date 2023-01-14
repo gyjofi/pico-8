@@ -1,11 +1,20 @@
-enemies={}
-spawn_timer=0
+function enemies_init()
+    enemies={}
+    spawn_timer=0
+end
 
 function enemies_update()
     for e in all(enemies) do
+        --check player hit
+        if(col(e, player)) then
+            music(-1)
+            sfx(5)
+            player.lives-=1
+            game_mode="lose"
+        end
+
         if e.move_step==0 then
             e.move_step=8
-
             --determine disabled directions
             local d_dir={x=nil, y=nil}
             if e.x<=0 then d_dir.x="l" end
@@ -20,7 +29,7 @@ function enemies_update()
             if e.x<=0 and e.dir=="l" then dx_dir="l" elseif e.x>=120 and e.dir=="r" then dx_dir="r" end
             if e.y<=8 and e.dir=="u" then dy_dir="u" elseif e.y>=120 and e.dir=="d" then dy_dir="d" end
             
-            if check_map(e, e.dir, 7, true) or dx_dir!=nil or dy_dir!=nil then
+            if check_map(e, e.dir, 7, true) or apple_col(e) or dx_dir!=nil or dy_dir!=nil then
                 local d=e.dir
                 local found_dir=nil
                 local next_dir=nil
@@ -28,7 +37,7 @@ function enemies_update()
                 for ds=1,4 do
                     if found_dir==nil then
                         next_dir=get_next_dir(d, look_right)
-                        if check_map(e, next_dir, 7, true) or next_dir==d_dir.x or next_dir==d_dir.y or next_dir==dx_dir or next_dir==dy_dir then 
+                        if check_map(e, next_dir, 7, true) or apple_col(e, false, next_dir) or next_dir==d_dir.x or next_dir==d_dir.y or next_dir==dx_dir or next_dir==dy_dir then 
                             d=next_dir
                         else
                             found_dir=next_dir
@@ -37,7 +46,11 @@ function enemies_update()
                 end
                 e.dir=found_dir
             else --direction change possible
-
+                local psbl = rnd()>0.5
+                local look = get_next_dir(e.dir, rnd()>.5)
+                if(psbl and look!=d_dir.x and look!=d_dir.y and check_map(e, look, 7, true)==false and apple_col(e, false, look)==false and look!=e.dir) then
+                    e.dir=look
+                end
             end
         end
 
@@ -54,7 +67,6 @@ function enemies_update()
 end
 
 function enemies_draw()
-    print(#enemies, 40, 1, 7)
     for e in all(enemies) do
         local sp = mid(1, e.anim_step, #e.anim_sps)
         spr(e.anim_sps[sp], e.x, e.y,1,1,e.xflip)

@@ -1,37 +1,49 @@
---player.lua
-
-player={ 
-    x=64,
-    y=64,
-    dir="i",
-    move=false,
-    move_step=0,
-    anim_sps={16, 17},
-    anim_step=1,
-    anim=0,
-    xflip=false,
-    fruits=0
-}
-
 function player_init()
-
+    player={ 
+        x=64,
+        y=64,
+        dir="i",
+        move=false,
+        move_step=0,
+        anim_sps={16, 17},
+        anim_step=1,
+        anim=0,
+        xflip=false,
+        fruits=0,
+        lives=3,
+        shoot_timer=-1,
+        has_seed=false
+    }
 end
 
 function player_update()
+        
+    if player.shoot_timer>0 then
+        player.shoot_timer-=1
+    elseif(player.shoot_timer==0) then
+        player.shoot_timer=-1
+        sfx(3)
+        player.has_seed=true
+    end
+
     if (player.move_step==0) then
         local last_dir = player.dir
         if (btn(0) and player.x>0) player.dir="l" player.move_step=8 
         if (btn(1) and player.x<120) player.dir="r" player.move_step=8
         if (btn(2) and player.y>8) player.dir="u" player.move_step=8
         if (btn(3) and player.y<120) player.dir="d" player.move_step=8
-        if (btnp(4)) blow_seed(player)
+        if (btnp(4) and player.has_seed) blow_seed(player) player.has_seed=false
         if check_map(player, player.dir, 0) and player.move_step==8 then
             player.move_step=0
             if mp.fruits==0 then
+                music(-1)
                 game_mode="win"
                 sfx(1)
                 ready_timer=100
             end
+        end
+        if apple_col(player) and player.move_step==8 then
+            player.move_step=0
         end
         if last_dir!=player.dir then player.anim_step=1 end
     end
@@ -85,5 +97,5 @@ function eat_fruit(pl)
     if (pl.dir=="r") mset(pl.x/8+1+mp.x, pl.y/8+mp.y, 0) del_fruit={x=pl.x+8, y=pl.y}
     if (pl.dir=="u") mset(pl.x/8+mp.x, pl.y/8-1+mp.y, 0) del_fruit={x=pl.x, y=pl.y-8}
     if (pl.dir=="d") mset(pl.x/8+mp.x, pl.y/8+1+mp.y, 0) del_fruit={x=pl.x, y=pl.y+8}
-    mp.fruits-=1 player.fruits+=1
+    mp.fruits-=1 player.fruits+=1 player.shoot_timer=64
 end

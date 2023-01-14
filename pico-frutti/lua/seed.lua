@@ -1,13 +1,19 @@
-seed={
-    x=0,
-    y=0,
-    dx=0,
-    dy=0,
-    hide=true
-}
+function seed_init()
+    seed={x=0,y=0,dx=0,dy=0,hide=true}
+end
 
 function seed_update()
     if seed.hide==false then
+        --check enemy hit
+        for e in all(enemies) do
+            if(e.x<=seed.x and e.x+8>=seed.x and e.y<=seed.y and e.y+8>seed.y) then
+                seed={x=0,y=0,dx=0,dy=0,hide=true}
+                del(enemies, e)
+                sfx(7)
+                mp.enemies-=1
+            end
+        end
+        --check map
         if pget(seed.x+seed.dx, seed.y)!=0 or seed.x+seed.dx<0 or seed.x+seed.dx>127 then seed.dx*=-1 sfx(2) end
         if pget(seed.x, seed.y+seed.dy)!=0 or seed.y+seed.dy<8 or seed.y+seed.dy>127 then seed.dy*=-1 sfx(2) end
         seed.x+=seed.dx seed.y+=seed.dy
