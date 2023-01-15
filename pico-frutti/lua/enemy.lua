@@ -16,38 +16,19 @@ function enemies_update()
 
         if e.move_step==0 then
             e.move_step=8
-            --determine disabled directions
-            local d_dir={x=nil, y=nil}
-            if e.x<=0 then d_dir.x="l" end
-            if e.x>=120 then d_dir.x="r" end
-            if e.y<=8 then d_dir.y="u" end
-            if e.y>=120 then d_dir.y="d" end
+            --determine disabled directions by map
+            local d_dir=get_disabled_dir(e)
 
             --should change direction
-            local dx_dir=nil
-            local dy_dir=nil
+            local d2_dir={x=nil, y=nil}
             
-            if e.x<=0 and e.dir=="l" then dx_dir="l" elseif e.x>=120 and e.dir=="r" then dx_dir="r" end
-            if e.y<=8 and e.dir=="u" then dy_dir="u" elseif e.y>=120 and e.dir=="d" then dy_dir="d" end
+            if e.x<=0 and e.dir=="l" then d2_dir.x="l" elseif e.x>=120 and e.dir=="r" then d2_dir.x="r" end
+            if e.y<=8 and e.dir=="u" then d2_dir.y="u" elseif e.y>=120 and e.dir=="d" then d2_dir.y="d" end
             
-            if check_map(e, e.dir, 7, true) or apple_col(e) or dx_dir!=nil or dy_dir!=nil then
-                local d=e.dir
-                local found_dir=nil
-                local next_dir=nil
-                local look_right=rnd()>.5
-                for ds=1,4 do
-                    if found_dir==nil then
-                        next_dir=get_next_dir(d, look_right)
-                        if check_map(e, next_dir, 7, true) or apple_col(e, false, next_dir) or next_dir==d_dir.x or next_dir==d_dir.y or next_dir==dx_dir or next_dir==dy_dir then 
-                            d=next_dir
-                        else
-                            found_dir=next_dir
-                        end
-                    end
-                end
-                e.dir=found_dir
+            if check_map(e, e.dir, 7, true) or apple_col(e) or d2_dir.x!=nil or d2_dir.y!=nil then
+                e.dir=get_free_dir(e, d_dir, d2_dir)
             else --direction change possible
-                local psbl = rnd()>0.5
+                local psbl = rnd()>0.5+(level/20)
                 local look = get_next_dir(e.dir, rnd()>.5)
                 if(psbl and look!=d_dir.x and look!=d_dir.y and check_map(e, look, 7, true)==false and apple_col(e, false, look)==false and look!=e.dir) then
                     e.dir=look
@@ -111,11 +92,4 @@ function anim_enemy(enemy)
             if enemy.move_step>0 then enemy.xflip=not enemy.xflip end
         end
     end
-end
-
-function get_next_dir(dir, right)
-    if (dir=="r") if right then return "d" else return "u" end
-    if (dir=="l") if right then return "u" else return "d" end
-    if (dir=="u") if right then return "r" else return "l" end
-    if (dir=="d") if right then return "l" else return "r" end
 end

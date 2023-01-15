@@ -104,8 +104,8 @@ function reset_game()
     level=mid(1, level, #levels)
     apples_init()
     enemies_init()
-    seed_init()
     player_init()
+    seed_init()
 end
 
 function map_init()

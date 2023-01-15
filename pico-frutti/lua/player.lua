@@ -32,7 +32,6 @@ function player_update()
         if (btn(1) and player.x<120) player.dir="r" player.move_step=8
         if (btn(2) and player.y>8) player.dir="u" player.move_step=8
         if (btn(3) and player.y<120) player.dir="d" player.move_step=8
-        if (btnp(4) and player.has_seed) blow_seed(player) player.has_seed=false
         if check_map(player, player.dir, 0) and player.move_step==8 then
             player.move_step=0
         end
@@ -48,6 +47,8 @@ function player_update()
         end
         if last_dir!=player.dir then player.anim_step=1 end
     end
+
+    if (btnp(4) and player.has_seed) blow_seed(player) player.has_seed=false
     
     if (check_map(player, player.dir, 2) and player.move_step==8) eat_fruit(player)
     move_player()

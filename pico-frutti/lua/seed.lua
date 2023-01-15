@@ -26,8 +26,9 @@ function seed_draw()
 end
 
 function blow_seed(pl)
-    if (pl.dir=="r" and pget(pl.x+12, pl.y+4)==0) seed={x=pl.x+8,y=pl.y+4,dx=2,dy=-2,hide=false}
-    if (pl.dir=="l" and pget(pl.x-4, pl.y+4)==0) seed={x=pl.x-1,y=pl.y+4,dx=-2,dy=-2,hide=false}
-    if (pl.dir=="d" and pget(pl.x+4, pl.y+12)==0) seed={x=pl.x+4,y=pl.y+8,dx=-2,dy=2,hide=false}
-    if (pl.dir=="u" and pget(pl.x+4, pl.y-4)==0) seed={x=pl.x+4,y=pl.y-1,dx=-2,dy=-2,hide=false}
+    local dir = get_free_dir(pl, get_disabled_dir(pl))
+    if (dir=="r") seed={x=pl.x+8,y=pl.y+4,dx=2,dy=-2,hide=false}
+    if (dir=="l") seed={x=pl.x-1,y=pl.y+4,dx=-2,dy=-2,hide=false}
+    if (dir=="d") seed={x=pl.x+4,y=pl.y+8,dx=-2,dy=2,hide=false}
+    if (dir=="u") seed={x=pl.x+4,y=pl.y-1,dx=-2,dy=-2,hide=false}
 end
