@@ -30,8 +30,10 @@ function _update()
         else 
             game_mode="game"
             if (mute==false) then music(6) else music(-1) end
+            game_time=0
         end
     elseif game_mode=="game" then
+        game_time+=1
         enemies_update()
         player_update()
         seed_update()
@@ -47,6 +49,7 @@ function _update()
             ready_timer-=1
         else
             stat_reason=game_mode
+            game_time=(3000-game_time)
             game_mode="stat"
         end
     elseif game_mode=="lose" then
@@ -54,6 +57,7 @@ function _update()
             ready_timer-=1
         else
             stat_reason=game_mode
+            game_time=0
             game_mode="stat"
         end
     elseif game_mode=="stat" then
@@ -113,6 +117,22 @@ function map_init()
             mudx=0,
             mudy=0,
             fruits=20,
+            enemies=4
+        },
+        {
+            x=48,
+            y=0,
+            mudx=32,
+            mudy=0,
+            fruits=24,
+            enemies=4
+        },
+        {
+            x=80,
+            y=0,
+            mudx=64,
+            mudy=0,
+            fruits=78,
             enemies=4
         }
     }

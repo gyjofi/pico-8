@@ -13,7 +13,6 @@ function player_init()
         enemies=0,
         shoot_timer=-1,
         has_seed=false,
-        score=0
     }
 end
 

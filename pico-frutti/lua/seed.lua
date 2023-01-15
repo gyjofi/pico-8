@@ -6,7 +6,7 @@ function seed_update()
     if seed.hide==false then
         --check enemy hit
         for e in all(enemies) do
-            if(e.x<=seed.x and e.x+8>=seed.x and e.y<=seed.y and e.y+8>seed.y) then
+            if(col(e, seed)) then
                 seed={x=0,y=0,dx=0,dy=0,hide=true}
                 del(enemies, e)
                 sfx(7)
