@@ -23,7 +23,13 @@ end
 function _update()
     if game_mode=="intro" then
         settings_update()
-        if (btnp(4) and show_settings==false) game_mode="ready" music(-1)
+        if (btnp(4) and show_settings==false) then
+            player_lives=3
+            player_score=0
+            level=1
+            game_mode="ready"
+            music(-1)
+        end
     elseif game_mode=="ready" then
         if(ready_timer>0) then
             ready_timer-=1

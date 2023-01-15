@@ -41,9 +41,6 @@ function stat_update(reason)
             game_mode="ready"
         else
             reset_game()
-            player_lives=3
-            player_score=0
-            level=1
             game_mode="intro"
         end
     end

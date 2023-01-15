@@ -42,6 +42,7 @@ function get_disabled_dir(obj) --return {x: dir, y:dir}
 end
 
 function get_free_dir(obj, d_dir, d2_dir) --return dir
+    if (d2_dir==nil) d2_dir={x="x", y="y"}
     local d=obj.dir
     local found_dir=nil
     local next_dir=nil
