@@ -1,11 +1,30 @@
 stat_done=false
-s_t=time()
+s_t=0
 s_enemies=0
 s_fruits=0
 s_score=0
 
 function stat_update(reason)
+    if(s_t-time()<.3 and stat_done==false) then
+        s_t=time()
+        if(player.enemies>0) then
+            s_enemies+=1
+            s_score+=10
+            player.enemies-=1
+            sfx(20)
+        elseif(player.fruits>0) then
+            s_fruits+=1
+            s_score+=1
+            player.fruits-=1
+            sfx(20)
+        else
+            player.score+=s_score
+            stat_done = true
+        end
+    end
     if btnp(4) and stat_done then
+        stat_done = false
+        if high_score<player.score then high_score=player.score end
         if (reason=="win") level+=1
         if (reason=="lose" and player_lives>0) or (reason=="win" and level<=#levels) then
             reset_game()
@@ -19,20 +38,6 @@ function stat_update(reason)
             game_mode="intro"
         end
     end
-    if(time()-s_t>.3 and stat_done==false) then
-        if(player.enemies>0) then
-            s_enemies+=1
-            s_score+=10
-            player.enemies-=1
-        elseif(player.fruits>0) then
-            s_fruits+=1
-            s_score+=1
-            player.fruits-=1
-        end
-        s_t=time()
-    else
-        stat_done = true
-    end
 end
 
 function stat_draw()
@@ -44,6 +49,8 @@ function stat_draw()
     spr(49, 24, 52) print(": "..s_fruits, 34, 52, 6)
 
     print("score: "..s_score, 24, 70, 10)
-    --if (stat_done) print("press ❎ to continue", 24, 102, 6)
-    print("press ❎ to continue", 24, 102, 6)
+    if(player.score>high_score) then
+        print("new highscore!", 24, 80, 10)
+    end
+    if (stat_done) print("press ❎ to continue", 24, 102, 6)
 end

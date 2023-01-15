@@ -96,8 +96,8 @@ end
 
 function reset_game()
     reload(0x1000, 0x1000, 0x2000)
-    level=mid(1, level, #levels)
     map_init()
+    level=mid(1, level, #levels)
     apples_init()
     enemies_init()
     seed_init()
