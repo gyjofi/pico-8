@@ -1,67 +1,89 @@
 --pico-frutti
 --main.lua
 
-game_mode="intro" --intro, ready, game, win, lose, over
-ready_timer=0
+game_mode="intro" --intro, ready, game, win, lose, stat
+ready_timer=30
 level=1
+player_lives=3
+player_score=0
+stat_reason="lose"
 
-mute=false
+mute=true
+high_score=0
 
 del_fruit={}
 
 function _init()
     cls()
     reset_game()
-    music(0)
+    if (mute==false) then music(0) else music(-1) end
 end
 
 function _update()
     if game_mode=="intro" then
-        if (btnp(4)) game_mode="ready" music(-1)
+        settings_update()
+        if (btnp(4) and show_settings==false) game_mode="ready" music(-1)
     elseif game_mode=="ready" then
-        reset_game()
-        game_mode="game"
-        if (mute==false) music(6)
+        if(ready_timer>0) then
+            ready_timer-=1
+        else 
+            game_mode="game"
+            if (mute==false) then music(6) else music(-1) end
+        end
     elseif game_mode=="game" then
         enemies_update()
         player_update()
         seed_update()
         apples_update()
     elseif game_mode=="win" then
-        if (btnp(4)) game_mode="ready"
+        if(ready_timer>0) then
+            ready_timer-=1
+        else
+            stat_reason=game_mode
+            game_mode="stat"
+        end
     elseif game_mode=="lose" then
-        if (btnp(4)) game_mode="ready"
+        if(ready_timer>0) then
+            ready_timer-=1
+        else
+            stat_reason=game_mode
+            game_mode="stat"
+        end
+    elseif game_mode=="stat" then
+        stat_update(stat_reason)
     end
 end
 
 function _draw()
     if game_mode=="intro" then
         main_draw()
+        settings_draw()
     elseif game_mode=="ready" then
-        --cls()
-        --map(mp.mudx,mp.mudy)
-        --memcpy(0x8000, 0x6000, 0x2000)
+        cls()
+        draw_game_parts()
+        print("ready!", 45, 56, 7)
     elseif game_mode=="game" then
         cls()
-        --update mud  map
-        --memcpy(0x6000, 0x8000, 0x2000)
-        --if(del_fruit.x!=nil) then rectfill(del_fruit.x, del_fruit.y, del_fruit.x+7, del_fruit.y+7, 0) del_fruit={} end
-        --rectfill(player.x, player.y, player.x+7, player.y+7, 0)
-        --memcpy(0x8000, 0x6000, 0x2000)
         mset((player.x+4)/8+mp.mudx, (player.y+4)/8+mp.mudy, 0)
-        map(mp.mudx, mp.mudy)
-        --draw
-        enemies_draw()
-        map(mp.x,mp.y)
-        player_draw()
-        seed_draw()
-        apples_draw()
-        infobar_draw()
+        draw_game_parts()
     elseif game_mode=="win" then
         print("you win!", 45, 56, 7)
     elseif game_mode=="lose" then
         print("you lose!", 45, 56, 7)
+    elseif game_mode=="stat" then
+        stat_draw()
     end
+end
+
+function draw_game_parts()
+    map(mp.mudx, mp.mudy)
+    --draw
+    enemies_draw()
+    map(mp.x,mp.y)
+    player_draw()
+    seed_draw()
+    apples_draw()
+    infobar_draw()
 end
 
 function reset_game()
@@ -81,7 +103,6 @@ function map_init()
             y=0,
             mudx=0,
             mudy=0,
-            lives=3,
             fruits=20,
             enemies=4
         }
@@ -90,12 +111,13 @@ function map_init()
 end
 
 function main_draw()
-    cls()
+    cls(1)
     map(main_mp.x, main_mp.y)
+    print("\^whighscore:"..high_score, 2, 2, 7)
     print("\^b\^t\^wpico frutti", 21, 28, 10)
     print("FEATURING...", 26, 45, 6)
     print("sUPER sTRAWBERRY", 40, 57, 6)
     print("AND THE acid apples", 26, 72, 6)
-    print("press ❎ to start", 26, 94, 6)
-    print("press 🅾️ to settings", 26, 102, 6)
+    print("press ❎ to settings", 26, 94, 6)
+    print("press 🅾️ to start", 26, 102, 6)
 end

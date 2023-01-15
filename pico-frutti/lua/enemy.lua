@@ -9,8 +9,9 @@ function enemies_update()
         if(col(e, player)) then
             music(-1)
             sfx(5)
-            player.lives-=1
+            player_lives-=1
             game_mode="lose"
+            ready_timer=30
         end
 
         if e.move_step==0 then

@@ -10,9 +10,9 @@ function player_init()
         anim=0,
         xflip=false,
         fruits=0,
-        lives=3,
         shoot_timer=-1,
-        has_seed=false
+        has_seed=false,
+        score=0
     }
 end
 
@@ -37,9 +37,10 @@ function player_update()
             player.move_step=0
             if mp.fruits==0 then
                 music(-1)
+                level+=1
                 game_mode="win"
                 sfx(1)
-                ready_timer=100
+                ready_timer=30
             end
         end
         if apple_col(player) and player.move_step==8 then

@@ -20,8 +20,9 @@ function apples_update()
                 if(col(ac, player)) then
                     music(-1)
                     sfx(5)
-                    player.lives-=1
+                    player_lives-=1
                     game_mode="lose"
+                    ready_timer=30
                 end
                 for e in all(enemies) do
                     if(col(e, ac)) then
