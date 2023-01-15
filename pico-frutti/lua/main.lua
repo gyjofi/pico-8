@@ -1,22 +1,27 @@
 --pico-frutti
 --main.lua
 
-game_mode="ready" --intro, ready, game, win, lose, over
+game_mode="intro" --intro, ready, game, win, lose, over
 ready_timer=0
+level=1
 
 mute=false
 
 del_fruit={}
 
 function _init()
+    cls()
     reset_game()
+    music(0)
 end
 
 function _update()
-    if game_mode=="ready" then
+    if game_mode=="intro" then
+        if (btnp(4)) game_mode="ready" music(-1)
+    elseif game_mode=="ready" then
         reset_game()
         game_mode="game"
-        if (mute==false) music(0)
+        if (mute==false) music(6)
     elseif game_mode=="game" then
         enemies_update()
         player_update()
@@ -30,7 +35,9 @@ function _update()
 end
 
 function _draw()
-    if game_mode=="ready" then
+    if game_mode=="intro" then
+        main_draw()
+    elseif game_mode=="ready" then
         --cls()
         --map(mp.mudx,mp.mudy)
         --memcpy(0x8000, 0x6000, 0x2000)
@@ -67,13 +74,28 @@ function reset_game()
 end
 
 function map_init()
-    mp={
-        x=16,
-        y=0,
-        mudx=0,
-        mudy=0,
-        lives=3,
-        fruits=20,
-        enemies=4
+    main_mp={ x=0, y=32, }
+    levels={
+        {
+            x=16,
+            y=0,
+            mudx=0,
+            mudy=0,
+            lives=3,
+            fruits=20,
+            enemies=4
+        }
     }
+    mp=levels[level]
+end
+
+function main_draw()
+    cls()
+    map(main_mp.x, main_mp.y)
+    print("\^b\^t\^wpico frutti", 21, 28, 10)
+    print("FEATURING...", 26, 45, 6)
+    print("sUPER sTRAWBERRY", 40, 57, 6)
+    print("AND THE acid apples", 26, 72, 6)
+    print("press ❎ to start", 26, 94, 6)
+    print("press 🅾️ to settings", 26, 102, 6)
 end

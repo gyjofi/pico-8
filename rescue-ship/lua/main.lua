@@ -82,8 +82,8 @@ function _draw()
         infobar_draw()
         print("game over", 46, 64, 5)
         print("game over", 45, 63, 7)
-        print("perss 🅾️ to retry", 5, 105, 6)
-        print("perss ❎ to exit", 5, 115, 6)
+        print("press 🅾️ to retry", 5, 105, 6)
+        print("press ❎ to exit", 5, 115, 6)
     end
 end
 
