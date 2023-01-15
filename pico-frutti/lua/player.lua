@@ -10,6 +10,7 @@ function player_init()
         anim=0,
         xflip=false,
         fruits=0,
+        enemies=0,
         shoot_timer=-1,
         has_seed=false,
         score=0
@@ -35,13 +36,13 @@ function player_update()
         if (btnp(4) and player.has_seed) blow_seed(player) player.has_seed=false
         if check_map(player, player.dir, 0) and player.move_step==8 then
             player.move_step=0
-            if mp.fruits==0 then
-                music(-1)
-                level+=1
-                game_mode="win"
-                sfx(1)
-                ready_timer=30
-            end
+        end
+        if player.x<=63 and player.x>=56 and player.y>=63 and player.y<=72 and mp.fruits==0 then
+            player.move_step=0
+            music(-1)
+            game_mode="win"
+            sfx(1)
+            ready_timer=30
         end
         if apple_col(player) and player.move_step==8 then
             player.move_step=0

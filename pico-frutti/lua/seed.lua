@@ -11,6 +11,7 @@ function seed_update()
                 del(enemies, e)
                 sfx(7)
                 mp.enemies-=1
+                player.enemies+=1
             end
         end
         --check map

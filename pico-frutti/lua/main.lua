@@ -7,6 +7,7 @@ level=1
 player_lives=3
 player_score=0
 stat_reason="lose"
+home_color=5
 
 mute=true
 high_score=0
@@ -35,6 +36,12 @@ function _update()
         player_update()
         seed_update()
         apples_update()
+        if(#enemies>0) then
+            home_color+=1
+            if(home_color>15) home_color=1
+        else
+            home_color=5
+        end
     elseif game_mode=="win" then
         if(ready_timer>0) then
             ready_timer-=1
@@ -84,10 +91,12 @@ function draw_game_parts()
     seed_draw()
     apples_draw()
     infobar_draw()
+    rectfill(56,64,63,71,home_color)
 end
 
 function reset_game()
     reload(0x1000, 0x1000, 0x2000)
+    level=mid(1, level, #levels)
     map_init()
     apples_init()
     enemies_init()
