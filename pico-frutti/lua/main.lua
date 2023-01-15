@@ -134,6 +134,14 @@ function map_init()
             mudy=0,
             fruits=78,
             enemies=4
+        },
+        {
+            x=112,
+            y=0,
+            mudx=96,
+            mudy=0,
+            fruits=32,
+            enemies=4
         }
     }
     mp=levels[level]

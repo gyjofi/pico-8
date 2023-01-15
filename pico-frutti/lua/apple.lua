@@ -1,14 +1,15 @@
 apples_levels={
     { {x=3, y=2}, {x=1, y=10}, {x=14, y=6}, {x=12, y=10} },
     { {x=2, y=1}, {x=1, y=6}, {x=13, y=1}, {x=14, y=3}, {x=5, y=6}, {x=8, y=4} },
-    { {x=1, y=2}, {x=3, y=4}, {x=5, y=5}, {x=10, y=5}, {x=12, y=4}, {x=14, y=2} }
+    { {x=1, y=2}, {x=3, y=4}, {x=5, y=5}, {x=10, y=5}, {x=12, y=4}, {x=14, y=2} },
+    { {x=6, y=4}, {x=9, y=4}, {x=5, y=5}, {x=10, y=5}, {x=2, y=9}, {x=13, y=9} }
 }
 apples={}
 
 function apples_init()
     apples={}
     for a in all(apples_levels[level]) do
-        add(apples, {x=a.x, y=a.y, fall=false,fall_timer=12})
+        add(apples, {x=a.x, y=a.y, fall=false,fall_timer=14})
     end
 end
 
@@ -36,7 +37,7 @@ function apples_update()
                 end
             else
                 a.fall=false
-                a.fall_timer=12
+                a.fall_timer=14
             end
         elseif a.fall==false and fget(mget(a.x+mp.mudx, a.y+1+mp.mudy))==0 and a.y<15 then
             mset(a.x+mp.mudx, a.y+mp.mudy, 0)
