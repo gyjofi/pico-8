@@ -27,6 +27,7 @@ function _update()
             player_lives=3
             player_score=0
             level=1
+            reset_game()
             game_mode="ready"
             music(-1)
         end

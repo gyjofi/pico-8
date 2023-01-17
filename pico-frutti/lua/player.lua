@@ -32,7 +32,7 @@ function player_update()
         if (btn(1) and player.x<120) player.dir="r" player.move_step=8
         if (btn(2) and player.y>8) player.dir="u" player.move_step=8
         if (btn(3) and player.y<120) player.dir="d" player.move_step=8
-        if check_map(player, player.dir, 0) and player.move_step==8 then
+        if check_map(player, player.dir, 0, true) and player.move_step==8 then
             player.move_step=0
         end
         if player.x<=63 and player.x>=56 and player.y>=63 and player.y<=72 and mp.fruits==0 then
