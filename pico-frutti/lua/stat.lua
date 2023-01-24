@@ -35,13 +35,14 @@ function stat_update(reason)
         stat_done = false s_t=0 s_enemies=0 s_fruits=0 s_score=0
         if high_score<player_score then high_score=player_score end
         if (reason=="win") level+=1
-        if (mute==false) then music(0) else music(-1) end
         if (reason=="lose" and player_lives>0) or (reason=="win" and level<=#levels) then
             ready_timer=60
             reset_game()
             game_mode="ready"
+            music(-1)
         else
             game_mode="intro"
+            if (mute==false) then music(0) else music(-1) end
         end
     end
 end
